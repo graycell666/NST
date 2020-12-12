@@ -199,36 +199,6 @@ def train(args, image_transformer, train_loader, optimizer, vgg, loss_mse, style
                 image_transformer.train()
 
 
-# In[10]:
-
-
-def style_transfer(args):
-    # Enable GPU
-    use_cuda = enable_gpu(args)
-
-    # content image
-    img_transform_512 = transforms.Compose([
-            transforms.Resize(512),                  # scale shortest side to image_size
-            transforms.CenterCrop(512),             # crop center image_size out
-            transforms.ToTensor(),                  # turn image from [0-255] to [0-1]
-            utils.normalize_tensor_transform()      # normalize with ImageNet values
-    ])
-
-    content = utils.load_image(args.source)
-    content = img_transform_512(content)
-    content = content.unsqueeze(0)
-#     content = Variable(content).type(dtype)
-    content = Variable(content)
-
-    # load style model
-#     style_model = ImageTransformNet().type(dtype)
-    style_model = ImageTransformNet()
-    style_model.load_state_dict(torch.load(args.model_path))
-
-    # process input image
-    stylized = style_model(content).cpu()
-    utils.save_image(args.output, stylized.data[0])
-
 
 # In[14]:
 
